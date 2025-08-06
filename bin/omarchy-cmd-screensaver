@@ -1,20 +1,13 @@
 #!/bin/bash
 
-if command -v tte &>/dev/null; then
-  while true; do
-    effect=$(tte 2>&1 | grep -oP '{\K[^}]+' | tr ',' ' ' | tr ' ' '\n' | sed -n '/^beams$/,$p' | sort -u | shuf -n1)
-    tte -i ~/.local/share/omarchy/logo.txt \
-      --frame-rate 240 --canvas-width 0 --canvas-height $(($(tput lines) - 2)) --anchor-canvas c --anchor-text c \
-      "$effect" &
+if command -v pipes.sh &>/dev/null; then
+   # Run pipes.sh in the foreground.
+   # The script will wait here until a key is pressed, causing pipes.sh to exit.
+   pipes.sh
 
-    while pgrep tte >/dev/null; do
-      if read -n 1 -t 0.01; then
-        pkill tte 2>/dev/null
-        pkill -f "alacritty --class Screensaver" 2>/dev/null
-        exit 0
-      fi
-    done
-  done
+   # Once pipes.sh exits, the script continues to this line.
+   # Now, kill the terminal window.
+   pkill -f "ghostty --class=luke.screensaver" 2>/dev/null
 else
-  gum spin --title "Can't find tte. Try: pip install terminaltexteffects" -- sleep 2
+   gum spin --title "Can't find pipes.sh" -- sleep 2
 fi

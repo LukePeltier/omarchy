@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # Exit early if screensave is already running
-pgrep -f "alacritty --class Screensaver" && exit 0
+pgrep -f "ghostty --class=luke.screensaver" && exit 0
 
 focused=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')
 
 for m in $(hyprctl monitors -j | jq -r '.[] | .name'); do
-  hyprctl dispatch focusmonitor $m
-  hyprctl dispatch exec -- \
-    alacritty --class Screensaver \
-    -o 'colors.primary.background="#000000"' \
-    -o 'colors.cursor.cursor="#000000"' \
-    -o 'font.size=18' \
-    -o 'window.opacity=1' \
-    -e ~/.local/share/omarchy/bin/omarchy-cmd-screensaver
+   hyprctl dispatch focusmonitor $m
+   hyprctl dispatch exec -- \
+      ghostty --class=luke.screensaver \
+      --background="#000000" \
+      --cursor-color="#000000" \
+      --font-size=18 \
+      --background-opacity=1 \
+      -e ~/.local/share/omarchy/bin/omarchy-cmd-screensaver
 done
 
 hyprctl dispatch focusmonitor $focused

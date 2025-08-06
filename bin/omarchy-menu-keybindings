@@ -11,27 +11,27 @@
 # - Map numeric modifier key mask to a textual rendition
 # - Output comma-separated values that the parser can understand
 dynamic_bindings() {
-  hyprctl -j binds | \
-    jq -r '.[] | {modmask, key, keycode, description, dispatcher, arg} | "\(.modmask),\(.key)@\(.keycode),\(.description),\(.dispatcher),\(.arg)"' | \
-    sed -r \
-        -e 's/null//' \
-        -e 's,~/.local/share/omarchy/bin/,,' \
-        -e 's,uwsm app -- ,,' \
-        -e 's/@0//' \
-        -e 's/,@/,code:/' \
-        -e 's/^0,/,/' \
-        -e 's/^1,/SHIFT,/' \
-        -e 's/^4,/CTRL,/' \
-        -e 's/^5,/SHIFT CTRL,/' \
-        -e 's/^8,/ALT,/' \
-        -e 's/^9,/SHIFT ALT,/' \
-        -e 's/^12,/CTRL ALT,/' \
-        -e 's/^13,/SHIFT CTRL ALT,/' \
-        -e 's/^64,/SUPER,/' \
-        -e 's/^65,/SUPER SHIFT,/' \
-        -e 's/^68,/SUPER CTRL,/' \
-        -e 's/^69,/SUPER SHIFT CTRL,/' \
-        -e 's/^72,/SUPER ALT,/'
+   hyprctl -j binds | \
+      jq -r '.[] | {modmask, key, keycode, description, dispatcher, arg} | "\(.modmask),\(.key)@\(.keycode),\(.description),\(.dispatcher),\(.arg)"' | \
+      sed -r \
+      -e 's/null//' \
+      -e 's,~/.local/share/omarchy/bin/,,' \
+      -e 's,uwsm app -- ,,' \
+      -e 's/@0//' \
+      -e 's/,@/,code:/' \
+      -e 's/^0,/,/' \
+      -e 's/^1,/SHIFT,/' \
+      -e 's/^4,/CTRL,/' \
+      -e 's/^5,/SHIFT CTRL,/' \
+      -e 's/^8,/ALT,/' \
+      -e 's/^9,/SHIFT ALT,/' \
+      -e 's/^12,/CTRL ALT,/' \
+      -e 's/^13,/SHIFT CTRL ALT,/' \
+      -e 's/^64,/SUPER,/' \
+      -e 's/^65,/SUPER SHIFT,/' \
+      -e 's/^68,/SUPER CTRL,/' \
+      -e 's/^69,/SUPER SHIFT CTRL,/' \
+      -e 's/^72,/SUPER ALT,/'
 }
 
 # Parse and format keybindings
@@ -42,7 +42,7 @@ dynamic_bindings() {
 # - Joins the command that the key executes.
 # - Prints everything in a nicely aligned format.
 parse_bindings() {
-  awk -F, '
+   awk -F, '
 {
     # Combine the modifier and key (first two fields)
     key_combo = $1 " + " $2;
@@ -77,10 +77,10 @@ parse_bindings() {
     if (action != "") {
         printf "%-35s → %s\n", key_combo, action;
     }
-}'
+   }'
 }
 
 dynamic_bindings | \
-  sort -u | \
-  parse_bindings | \
-  walker --dmenu --theme keybindings -p 'Keybindings'
+   sort -u | \
+   parse_bindings | \
+   walker --dmenu --theme keybindings -p 'Keybindings'
